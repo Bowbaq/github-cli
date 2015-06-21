@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"regexp"
 	"strings"
 	"text/template"
@@ -14,25 +13,34 @@ var funcMap = template.FuncMap{
 	},
 }
 
-var subCommandTmpl = template.Must(template.New("subcommand").Funcs(funcMap).Parse(`
+func dasherize(name string) string {
+	re := regexp.MustCompile("[a-z][A-Z]")
+	return strings.ToLower(re.ReplaceAllStringFunc(name, func(s string) string {
+		return s[:1] + "-" + s[1:]
+	}))
+}
+
+func camelcase(name string) string {
+	re := regexp.MustCompile("[a-z][A-Z]")
+	return strings.ToLower(re.ReplaceAllStringFunc(name, func(s string) string {
+		return s[:1] + "_" + s[1:]
+	}))
+}
+
+var serviceTmpl = template.Must(template.New("service").Funcs(funcMap).Parse(`
 package main
 
-import (
-{{range .Imports}}"{{.}}"
-{{end}}
-)
-
-var {{.Service}} = cli.Command{
-  Name:        "{{.Service | pointer | dasherize}}",
+var {{.Name}} = cli.Command{
+  Name:        "{{.Name | pointer | dasherize}}",
   HideHelp:    true,
   Action:      fixHelp,
   Subcommands: []cli.Command{
-  {{range .Commands}}{{.}}{{end}}
+  {{range .SubCommands}}{{.Body}}{{end}}
   },
 }
 
 func init() {
-  app.cli.Commands = append(app.cli.Commands, {{.Service}})
+  app.cli.Commands = append(app.cli.Commands, {{.Name}})
 }
 `))
 
@@ -80,27 +88,11 @@ var simpleListTmpl = template.Must(template.New("simple-list").Funcs(funcMap).Pa
   },
 },`))
 
-func simpleListImpl(m *method) string {
-	var buf bytes.Buffer
-	check(simpleListTmpl.Execute(&buf, map[string]string{
-		"Service":    m.service,
-		"Name":       m.name,
-		"ReturnType": m.returns[0],
-	}))
-
-	return buf.String()
-}
-
-func dasherize(name string) string {
-	re := regexp.MustCompile("[a-z][A-Z]")
-	return strings.ToLower(re.ReplaceAllStringFunc(name, func(s string) string {
-		return s[:1] + "-" + s[1:]
-	}))
-}
-
-func camelcase(name string) string {
-	re := regexp.MustCompile("[a-z][A-Z]")
-	return strings.ToLower(re.ReplaceAllStringFunc(name, func(s string) string {
-		return s[:1] + "_" + s[1:]
-	}))
-}
+var notImplementedTmpl = template.Must(template.New("not-implemented").Funcs(funcMap).Parse(
+	`cli.Command{
+  Name:  "{{.Name | dasherize}}",
+  Action: func(c *cli.Context) {
+    fmt.Println("Not implemented")
+    os.Exit(1)
+  },
+},`))

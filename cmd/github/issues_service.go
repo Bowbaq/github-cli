@@ -5,16 +5,33 @@ import (
 	"os"
 
 	"github.com/codegangsta/cli"
-	"github.com/google/go-github/github"
 )
 
-var OrganizationsService = cli.Command{
-	Name:     "organizations",
+var IssuesService = cli.Command{
+	Name:     "issues",
 	HideHelp: true,
 	Action:   fixHelp,
 	Subcommands: []cli.Command{
 		cli.Command{
 			Name: "list",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-by-org",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-issues",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-by-repo",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
@@ -26,222 +43,169 @@ var OrganizationsService = cli.Command{
 				os.Exit(1)
 			},
 		}, cli.Command{
+			Name: "create",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
 			Name: "edit",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "list-hooks",
+			Name: "list-assignees",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "get-hook",
+			Name: "is-assignee",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "create-hook",
+			Name: "list-comments",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "edit-hook",
+			Name: "get-comment",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "ping-hook",
+			Name: "create-comment",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "delete-hook",
+			Name: "edit-comment",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "list-members",
+			Name: "delete-comment",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "is-member",
+			Name: "list-issue-events",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "is-public-member",
+			Name: "list-repository-events",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "remove-member",
+			Name: "get-event",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "publicize-membership",
+			Name: "list-labels",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "conceal-membership",
+			Name: "get-label",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "list-org-memberships",
+			Name: "create-label",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "get-org-membership",
+			Name: "edit-label",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "edit-org-membership",
+			Name: "delete-label",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "list-teams",
+			Name: "list-labels-by-issue",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "get-team",
+			Name: "add-labels-to-issue",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "create-team",
+			Name: "remove-label-for-issue",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "edit-team",
+			Name: "replace-labels-for-issue",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "delete-team",
+			Name: "remove-labels-for-issue",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "list-team-members",
+			Name: "list-labels-for-milestone",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "is-team-member",
+			Name: "list-milestones",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "list-team-repos",
+			Name: "get-milestone",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "is-team-repo",
+			Name: "create-milestone",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "add-team-repo",
+			Name: "edit-milestone",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
 			},
 		}, cli.Command{
-			Name: "remove-team-repo",
-			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
-			},
-		}, cli.Command{
-			Name: "list-user-teams",
-			Flags: []cli.Flag{
-				cli.BoolFlag{
-					Name:  "all, a",
-					Usage: "fetch all the pages",
-				},
-				cli.IntFlag{
-					Name:  "page, p",
-					Value: 0,
-					Usage: "fetch this specific page",
-				},
-				cli.IntFlag{
-					Name:  "page-size, ps",
-					Value: 30,
-					Usage: "fetch <page-size> items per page",
-				},
-			},
-			Action: func(c *cli.Context) {
-				var items []github.Team
-
-				opt := &github.ListOptions{
-					Page:    c.Int("page"),
-					PerPage: c.Int("page-size"),
-				}
-
-				for {
-					page, res, err := app.gh.Organizations.ListUserTeams(opt)
-					checkResponse(res.Response, err)
-
-					items = append(items, page...)
-					if res.NextPage == 0 || !c.Bool("all") {
-						break
-					}
-					opt.Page = res.NextPage
-				}
-
-				for _, item := range items {
-					fmt.Println(item)
-				}
-			},
-		}, cli.Command{
-			Name: "get-team-membership",
-			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
-			},
-		}, cli.Command{
-			Name: "add-team-membership",
-			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
-			},
-		}, cli.Command{
-			Name: "remove-team-membership",
+			Name: "delete-milestone",
 			Action: func(c *cli.Context) {
 				fmt.Println("Not implemented")
 				os.Exit(1)
@@ -251,5 +215,5 @@ var OrganizationsService = cli.Command{
 }
 
 func init() {
-	app.cli.Commands = append(app.cli.Commands, OrganizationsService)
+	app.cli.Commands = append(app.cli.Commands, IssuesService)
 }

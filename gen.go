@@ -1,88 +1,91 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 	"os/exec"
 	"path"
-	"strings"
-
-	"go/ast"
-
-	"golang.org/x/tools/go/loader"
+	"sort"
+	"text/template"
 )
 
-type argument struct {
-	name string
-	typ  string
+type service struct {
+	Name        string
+	SubCommands []command
 }
 
-func (a argument) String() string {
-	return a.name + " " + a.typ
+type command struct {
+	Service    string
+	Name       string
+	ReturnType string
+	Tmpl       *template.Template
 }
 
-type method struct {
-	service string
-	name    string
-	args    []argument
-	returns []string
-}
-
-func (m method) String() string {
-	var strargs []string
-	for _, arg := range m.args {
-		strargs = append(strargs, arg.String())
-	}
-
-	return fmt.Sprintf("%s.%s(%s)", m.service, m.name, strings.Join(strargs, ", "))
+func (c command) Body() string {
+	var buf bytes.Buffer
+	check(c.Tmpl.Execute(&buf, c))
+	return buf.String()
 }
 
 func main() {
-	var conf loader.Config
+	methods := extractServiceMethods()
 
-	conf.Import("github.com/google/go-github/github")
-
-	prog, err := conf.Load()
-	check(err)
-	pkg := prog.Package("github.com/google/go-github/github")
-
-	var methods []*method
-	for _, f := range pkg.Files {
-		ast.Inspect(f, func(n ast.Node) bool {
-			if method := toServiceMethod(pkg, n); method != nil {
-				methods = append(methods, method)
-			}
-
-			return true
-		})
-	}
-
-	impls := make(map[string][]string)
+	services := make(map[string]*service)
+	unimplemented := make(map[string][]string)
 	for _, method := range methods {
-		switch {
-		case len(method.args) == 1 && method.args[0].typ == "*github.ListOptions":
-			impls[method.service] = append(impls[method.service], simpleListImpl(method))
+		if _, ok := services[method.service]; !ok {
+			services[method.service] = &service{Name: method.service}
+		}
+
+		if subCommand := toSubCommand(method); subCommand != nil {
+			services[method.service].SubCommands = append(services[method.service].SubCommands, *subCommand)
+		} else {
+			unimplemented[method.signature()] = append(unimplemented[method.signature()], method.String())
 		}
 	}
 
-	for service, commands := range impls {
-		f, err := os.Create(path.Join("cmd", "github", camelcase(service)+".go"))
+	for name, service := range services {
+		f, err := os.Create(path.Join("cmd", "github", camelcase(name)+".go"))
 		check(err)
 
-		subCommandTmpl.Execute(f, map[string]interface{}{
-			"Service": service,
-			"Imports": []string{
-				"fmt",
-				"github.com/codegangsta/cli",
-				"github.com/google/go-github/github",
-			},
-			"Commands": commands,
-		})
-
+		check(serviceTmpl.Execute(f, service))
 		f.Close()
 	}
 
 	check(exec.Command("goimports", "-w", "cmd/github").Run())
+
+	sorted := sortMapByValue(unimplemented)
+	missing := 0
+	for _, pair := range sorted {
+		fmt.Println(pair.Key)
+		for _, sig := range unimplemented[pair.Key] {
+			missing += 1
+			fmt.Println("  ", sig)
+		}
+	}
+
+	fmt.Println("Implemented", len(methods)-missing, "/", len(methods))
+
+}
+
+func toSubCommand(m method) *command {
+	var cmd *command
+	switch m.signature() {
+	case "(*github.ListOptions)":
+		cmd = &command{Tmpl: simpleListTmpl}
+	default:
+		cmd = &command{Tmpl: notImplementedTmpl}
+	}
+	if cmd == nil {
+		return nil
+	}
+
+	cmd.Service = m.service
+	cmd.Name = m.name
+	cmd.ReturnType = m.returns[0]
+
+	return cmd
 }
 
 func check(err error) {
@@ -92,45 +95,25 @@ func check(err error) {
 	}
 }
 
-func toServiceMethod(pkg *loader.PackageInfo, n ast.Node) *method {
-	decl, ok := n.(*ast.FuncDecl)
-	if !ok {
-		return nil
-	}
+// A data structure to hold a key/value pair.
+type Pair struct {
+	Key   string
+	Value int
+}
 
-	if decl.Recv == nil {
-		return nil
-	}
+// A slice of Pairs that implements sort.Interface to sort by Value.
+type PairList []Pair
 
-	recv, ok := decl.Recv.List[0].Type.(*ast.StarExpr)
-	if !ok {
-		return nil
-	}
+func (p PairList) Swap(i, j int)      { p[i], p[j] = p[j], p[i] }
+func (p PairList) Len() int           { return len(p) }
+func (p PairList) Less(i, j int) bool { return p[i].Value > p[j].Value }
 
-	ident, ok := recv.X.(*ast.Ident)
-	if !ok {
-		return nil
+// A function to turn a map into a PairList, then sort and return it.
+func sortMapByValue(m map[string][]string) PairList {
+	p := make(PairList, 0)
+	for k, v := range m {
+		p = append(p, Pair{k, len(v)})
 	}
-
-	if !strings.HasSuffix(ident.Name, "Service") {
-		return nil
-	}
-
-	m := &method{
-		service: ident.Name,
-		name:    decl.Name.String(),
-	}
-	for _, arg := range decl.Type.Params.List {
-		a := argument{
-			name: arg.Names[0].Name,
-			typ:  strings.Replace(pkg.Info.TypeOf(arg.Type).String(), "github.com/google/go-github/", "", -1),
-		}
-		m.args = append(m.args, a)
-	}
-	for _, ret := range decl.Type.Results.List {
-		retType := strings.Replace(pkg.Info.TypeOf(ret.Type).String(), "github.com/google/go-github/", "", -1)
-		m.returns = append(m.returns, retType)
-	}
-
-	return m
+	sort.Sort(p)
+	return p
 }

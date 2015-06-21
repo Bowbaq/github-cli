@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/codegangsta/cli"
 	"github.com/google/go-github/github"
@@ -52,6 +53,162 @@ var ActivityService = cli.Command{
 				for _, item := range items {
 					fmt.Println(item)
 				}
+			},
+		}, cli.Command{
+			Name: "list-repository-events",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-issue-events-for-repository",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-events-for-repo-network",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-events-for-organization",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-events-performed-by-user",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-events-recieved-by-user",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-user-events-for-organization",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-notifications",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-repository-notifications",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "mark-notifications-read",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "mark-repository-notifications-read",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "get-thread",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "mark-thread-read",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "get-thread-subscription",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "set-thread-subscription",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "delete-thread-subscription",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-stargazers",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-starred",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "is-starred",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "star",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "unstar",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-watchers",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "list-watched",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "get-repository-subscription",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "set-repository-subscription",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
+			},
+		}, cli.Command{
+			Name: "delete-repository-subscription",
+			Action: func(c *cli.Context) {
+				fmt.Println("Not implemented")
+				os.Exit(1)
 			},
 		},
 	},
