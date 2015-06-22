@@ -81,10 +81,3 @@ func checkResponse(res *http.Response, err error) {
 	check(err)
 	check(github.CheckResponse(res))
 }
-
-func parseInt(s string) int {
-	i, err := strconv.Atoi(s)
-	check(err)
-
-	return i
-}

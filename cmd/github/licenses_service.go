@@ -1,6 +1,11 @@
 package main
 
-import "github.com/codegangsta/cli"
+import (
+	"fmt"
+
+	"github.com/codegangsta/cli"
+	"github.com/kr/pretty"
+)
 
 var LicensesService = cli.Command{
 	Name:     "licenses",
@@ -8,14 +13,39 @@ var LicensesService = cli.Command{
 	Action:   fixHelp,
 	Subcommands: []cli.Command{
 		cli.Command{
-			Name: "list",
+			Name:  "list",
+			Usage: `list popular open source licenses.`,
+			Description: `list popular open source licenses.
+
+   GitHub API docs: https://developer.github.com/v3/licenses/#list-all-licenses
+`,
+			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
-				fatalln("Not implemented")
+
+				result, res, err := app.gh.Licenses.List()
+				checkResponse(res.Response, err)
+				fmt.Printf("%# v", pretty.Formatter(result))
+
 			},
 		}, cli.Command{
-			Name: "get",
+			Name:  "get",
+			Usage: `Fetch extended metadata for one license.`,
+			Description: `Fetch extended metadata for one license.
+
+   GitHub API docs: https://developer.github.com/v3/licenses/#get-an-individual-license
+`,
+			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
-				fatalln("Not implemented")
+				if len(c.Args()) < 1 {
+					fatalln("Usage: " + c.App.Name + "get <license-name>")
+				}
+
+				licenseName := c.Args().Get(0)
+
+				result, res, err := app.gh.Licenses.Get(licenseName)
+				checkResponse(res.Response, err)
+				fmt.Printf("%# v", pretty.Formatter(result))
+
 			},
 		},
 	},

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"regexp"
 	"strings"
 	"text/template"
@@ -14,32 +13,6 @@ var funcMap = template.FuncMap{
 	},
 	"sub": func(a, b int) int {
 		return a - b
-	},
-	"usage": func(m method) string {
-		var strargs []string
-		for _, arg := range m.Args {
-			if strings.HasSuffix(arg.Typ, "Options") {
-				break
-			}
-			strargs = append(strargs, "<"+arg.Name+">")
-		}
-
-		return strings.Join(strargs, " ")
-	},
-	"ctxargs": func(m method) string {
-		var ctxargs []string
-		for i, arg := range m.Args {
-			if strings.HasSuffix(arg.Typ, "Options") {
-				break
-			}
-			ctxarg := fmt.Sprintf("c.Args().Get(%d)", i)
-			if arg.Typ == "int" {
-				ctxarg = "parseInt(" + ctxarg + ")"
-			}
-			ctxargs = append(ctxargs, ctxarg)
-		}
-
-		return strings.Join(ctxargs, ", ")
 	},
 }
 
@@ -74,41 +47,55 @@ func init() {
 }
 `))
 
-var listTmpl = template.Must(template.New("simple-list").Funcs(funcMap).Parse(
+var singleTmpl = template.Must(template.New("single").Funcs(funcMap).Parse(
 	`cli.Command{
   Name:  "{{.Method.Name | dasherize}}",
+  Usage: ` + "`" + `{{.Method.Usage}}` + "`" + `,
+  Description: ` + "`" + `{{.Method.Description}}` + "`" + `,
   Flags: []cli.Flag{
-    cli.BoolFlag{
-      Name:  "all, a",
-      Usage: "fetch all the pages",
-    },
-    cli.IntFlag{
-      Name:  "page, p",
-      Value: 0,
-      Usage: "fetch this specific page",
-    },
-    cli.IntFlag{
-      Name:  "page-size, ps",
-      Value: 30,
-      Usage: "fetch <page-size> items per page",
-    },
+    {{range .Flags}}{{.}},
+    {{end}}
   },
-  Action: func(c *cli.Context) { {{if gt (len .Method.Args) 1}}
-    if len(c.Args()) < {{sub (len .Method.Args) 1}} {
-      fatalln("Usage: " + c.App.Name + " {{.Method.Name | dasherize}} {{.Method | usage}}")
+  Action: func(c *cli.Context) { {{if gt (len .Method.Args) 0}}
+    if len(c.Args()) < {{len .Method.Args}} {
+      fatalln("Usage: " + c.App.Name + "{{.Usage}}")
     }
 
     {{end}}
-    var items {{index .Method.Returns 0}}
+    {{.SetupArgs}}
 
-    opt := &github.ListOptions{
-      Page: c.Int("page"),
-      PerPage: c.Int("page-size"),
+    {{if eq (len .Method.Returns) 3}}
+    result, res, err := app.gh.{{.Method.Service | pointer}}.{{.Method.Name}}({{.ArgList}})
+    checkResponse(res.Response, err)
+    fmt.Printf("%# v", pretty.Formatter(result))
+    {{else}}
+    res, err := app.gh.{{.Method.Service | pointer}}.{{.Method.Name}}({{.ArgList}})
+    checkResponse(res.Response, err)
+    {{end}}
+  },
+},`))
+
+var listTmpl = template.Must(template.New("list").Funcs(funcMap).Parse(
+	`cli.Command{
+  Name:  "{{.Method.Name | dasherize}}",
+  Usage: ` + "`" + `{{.Method.Usage}}` + "`" + `,
+  Description: ` + "`" + `{{.Method.Description}}` + "`" + `,
+  Flags: []cli.Flag{
+    {{range .Flags}}{{.}},
+    {{end}}
+  },
+  Action: func(c *cli.Context) { {{if gt (len .Method.Args) 1}}
+    if len(c.Args()) < {{sub (len .Method.Args) 1}} {
+      fatalln("Usage: " + c.App.Name + "{{.Usage}}")
     }
 
-    {{$ctxargs := ctxargs .Method}}
+    {{end}}
+    {{.SetupArgs}}
+
+    var items {{index .Method.Returns 0}}
+
     for {
-      page, res, err := app.gh.{{.Method.Service | pointer}}.{{.Method.Name}}({{with $ctxargs}}{{$ctxargs}}, {{end}}opt)
+      page, res, err := app.gh.{{.Method.Service | pointer}}.{{.Method.Name}}({{.ArgList}})
       checkResponse(res.Response, err)
 
       items = append(items, page...)
@@ -125,6 +112,7 @@ var listTmpl = template.Must(template.New("simple-list").Funcs(funcMap).Parse(
 var notImplementedTmpl = template.Must(template.New("not-implemented").Funcs(funcMap).Parse(
 	`cli.Command{
   Name:  "{{.Method.Name | dasherize}}",
+  Usage: "not implemented",
   Action: func(c *cli.Context) {
     fatalln("Not implemented")
   },

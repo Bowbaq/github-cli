@@ -8,27 +8,26 @@ var SearchService = cli.Command{
 	Action:   fixHelp,
 	Subcommands: []cli.Command{
 		cli.Command{
-			Name: "repositories",
+			Name:  "repositories",
+			Usage: "not implemented",
 			Action: func(c *cli.Context) {
 				fatalln("Not implemented")
 			},
 		}, cli.Command{
-			Name: "issues",
+			Name:  "issues",
+			Usage: "not implemented",
 			Action: func(c *cli.Context) {
 				fatalln("Not implemented")
 			},
 		}, cli.Command{
-			Name: "users",
+			Name:  "users",
+			Usage: "not implemented",
 			Action: func(c *cli.Context) {
 				fatalln("Not implemented")
 			},
 		}, cli.Command{
-			Name: "code",
-			Action: func(c *cli.Context) {
-				fatalln("Not implemented")
-			},
-		}, cli.Command{
-			Name: "search",
+			Name:  "code",
+			Usage: "not implemented",
 			Action: func(c *cli.Context) {
 				fatalln("Not implemented")
 			},

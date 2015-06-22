@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"go/ast"
+	"go/doc"
+	"go/parser"
 	"strings"
 
 	"golang.org/x/tools/go/loader"
@@ -18,10 +20,11 @@ func (a argument) String() string {
 }
 
 type method struct {
-	Service string
-	Name    string
-	Args    []argument
-	Returns []string
+	Service     string
+	Name        string
+	Description string
+	Args        []argument
+	Returns     []string
 }
 
 func (m method) String() string {
@@ -31,6 +34,10 @@ func (m method) String() string {
 	}
 
 	return fmt.Sprintf("%s.%s(%s) (%s)", m.Service, m.Name, strings.Join(strargs, ", "), strings.Join(m.Returns, ", "))
+}
+
+func (m method) Usage() string {
+	return doc.Synopsis(m.Description)
 }
 
 func (m method) signature() string {
@@ -45,6 +52,7 @@ func (m method) signature() string {
 func extractServiceMethods() (methods []method) {
 	var conf loader.Config
 
+	conf.ParserMode |= parser.ParseComments
 	conf.Import("github.com/google/go-github/github")
 	prog, err := conf.Load()
 	if err != nil {
@@ -90,10 +98,17 @@ func toServiceMethod(pkg *loader.PackageInfo, n ast.Node) *method {
 		return nil
 	}
 
-	m := &method{
-		Service: ident.Name,
-		Name:    decl.Name.String(),
+	// Only want exported methods
+	if !ast.IsExported(decl.Name.String()) {
+		return nil
 	}
+
+	m := &method{
+		Service:     ident.Name,
+		Name:        decl.Name.String(),
+		Description: formatDescription(decl.Name.String(), decl.Doc.Text()),
+	}
+
 	// Extract (name, type) pairs of method arguments
 	for _, arg := range decl.Type.Params.List {
 		typ := strings.Replace(pkg.Info.TypeOf(arg.Type).String(), "github.com/google/go-github/", "", -1)
@@ -113,4 +128,22 @@ func toServiceMethod(pkg *loader.PackageInfo, n ast.Node) *method {
 	}
 
 	return m
+}
+
+// Fix indentation in CLI output
+func formatDescription(methodName, desc string) string {
+	desc = strings.Replace(desc, methodName, dasherize(methodName), -1)
+
+	lines := strings.Split(desc, "\n")
+	if len(lines) <= 1 {
+		return desc
+	}
+
+	for i, line := range lines[1:] {
+		if len(line) > 0 {
+			lines[i+1] = "   " + line
+		}
+	}
+
+	return strings.Join(lines, "\n")
 }

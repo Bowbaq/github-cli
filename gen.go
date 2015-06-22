@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"fmt"
+	"log"
 	"os"
 	"os/exec"
 	"path"
@@ -25,6 +26,68 @@ func (c command) Body() string {
 	var buf bytes.Buffer
 	check(c.Tmpl.Execute(&buf, c))
 	return buf.String()
+}
+
+func (c command) Flags() (flags []string) {
+	for _, arg := range c.Method.Args {
+		switch {
+		case arg.Typ == "bool":
+			flags = append(flags, fmt.Sprintf(`cli.BoolFlag{Name:  "%s"}`, dasherize(arg.Name)))
+		case arg.Typ == "*github.ListOptions":
+			flags = append(flags, `cli.BoolFlag{Name: "all, a", Usage: "fetch all the pages"}`)
+			flags = append(flags, `cli.IntFlag{Name: "page, p", Value: 0, Usage: "fetch this specific page"}`)
+			flags = append(flags, `cli.IntFlag{Name: "page-size, ps", Value: 30, Usage: "fetch <page-size> items per page"}`)
+		case arg.Typ == "int":
+		case arg.Typ == "string":
+		default:
+			log.Println("Unimplemented flag type: ", arg.Typ)
+		}
+	}
+
+	return flags
+}
+
+func (c command) Usage() string {
+	var usage bytes.Buffer
+	usage.WriteString(dasherize(c.Method.Name) + " ")
+	for _, arg := range c.Method.Args {
+		if arg.Typ != "string" && arg.Typ != "int" {
+			break
+		}
+		usage.WriteString("<" + dasherize(arg.Name) + "> ")
+	}
+
+	return strings.TrimSpace(usage.String())
+}
+
+func (c command) SetupArgs() string {
+	var setup []string
+	for i, arg := range c.Method.Args {
+		switch arg.Typ {
+		case "string":
+			setup = append(setup, fmt.Sprintf("%s := c.Args().Get(%d)", arg.Name, i))
+		case "int":
+			setup = append(setup, fmt.Sprintf("%s, err := strconv.Atoi(c.Args().Get(%d))", arg.Name, i), "check(err)")
+		case "bool":
+			setup = append(setup, fmt.Sprintf(`%s := c.Bool("%s")`+"\n", arg.Name, dasherize(arg.Name)))
+		case "*github.ListOptions":
+			setup = append(setup, arg.Name+` := &github.ListOptions{
+        Page: c.Int("page"),
+        PerPage: c.Int("page-size"),
+      }`)
+		}
+	}
+
+	return strings.Join(setup, "\n")
+}
+
+func (c command) ArgList() string {
+	var list []string
+	for _, arg := range c.Method.Args {
+		list = append(list, arg.Name)
+	}
+
+	return strings.Join(list, ", ")
 }
 
 func main() {
@@ -96,7 +159,11 @@ func toSubCommand(m method) *command {
 	switch m.signature() {
 	case "(*github.ListOptions)":
 		fallthrough
+	case "(int, *github.ListOptions)":
+		fallthrough
 	case "(string, *github.ListOptions)":
+		fallthrough
+	case "(string, bool, *github.ListOptions)":
 		fallthrough
 	case "(string, string, *github.ListOptions)":
 		fallthrough
@@ -106,6 +173,29 @@ func toSubCommand(m method) *command {
 		if strings.HasPrefix(m.Returns[0], "[]") {
 			cmd.Tmpl = listTmpl
 		}
+
+	case "()":
+		fallthrough
+	case "(int)":
+		fallthrough
+	case "(string)":
+		fallthrough
+	case "(string, string)":
+		fallthrough
+	case "(string, int)":
+		fallthrough
+	case "(int, string)":
+		fallthrough
+	case "(string, string, int)":
+		fallthrough
+	case "(int, string, string)":
+		fallthrough
+	case "(string, string, string)":
+		fallthrough
+	case "(string, string, int, string)":
+		fallthrough
+	case "(string, string, string, bool)":
+		cmd.Tmpl = singleTmpl
 	}
 
 	return cmd
