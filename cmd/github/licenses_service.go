@@ -37,7 +37,7 @@ var LicensesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "get <license-name>")
+					showHelp(c, "get", "get <license-name>")
 				}
 
 				licenseName := c.Args().Get(0)

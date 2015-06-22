@@ -22,7 +22,7 @@ var GitService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get-blob <owner> <repo> <sha>")
+					showHelp(c, "get-blob", "get-blob <owner> <repo> <sha>")
 				}
 
 				owner := c.Args().Get(0)
@@ -50,7 +50,7 @@ var GitService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get-commit <owner> <repo> <sha>")
+					showHelp(c, "get-commit", "get-commit <owner> <repo> <sha>")
 				}
 
 				owner := c.Args().Get(0)
@@ -78,7 +78,7 @@ var GitService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get-ref <owner> <repo> <ref>")
+					showHelp(c, "get-ref", "get-ref <owner> <repo> <ref>")
 				}
 
 				owner := c.Args().Get(0)
@@ -118,7 +118,7 @@ var GitService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "delete-ref <owner> <repo> <ref>")
+					showHelp(c, "delete-ref", "delete-ref <owner> <repo> <ref>")
 				}
 
 				owner := c.Args().Get(0)
@@ -139,7 +139,7 @@ var GitService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get-tag <owner> <repo> <sha>")
+					showHelp(c, "get-tag", "get-tag <owner> <repo> <sha>")
 				}
 
 				owner := c.Args().Get(0)
@@ -169,7 +169,7 @@ var GitService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 4 {
-					fatalln("Usage: " + c.App.Name + "get-tree <owner> <repo> <sha>")
+					showHelp(c, "get-tree", "get-tree <owner> <repo> <sha>")
 				}
 
 				owner := c.Args().Get(0)

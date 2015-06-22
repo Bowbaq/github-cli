@@ -25,7 +25,7 @@ var UsersService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "get <user>")
+					showHelp(c, "get", "get <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -57,7 +57,7 @@ var UsersService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "promote-site-admin <user>")
+					showHelp(c, "promote-site-admin", "promote-site-admin <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -76,7 +76,7 @@ var UsersService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "demote-site-admin <user>")
+					showHelp(c, "demote-site-admin", "demote-site-admin <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -95,7 +95,7 @@ var UsersService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "suspend <user>")
+					showHelp(c, "suspend", "suspend <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -114,7 +114,7 @@ var UsersService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "unsuspend <user>")
+					showHelp(c, "unsuspend", "unsuspend <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -183,7 +183,7 @@ var UsersService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list-followers <user>")
+					showHelp(c, "list-followers", "list-followers <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -222,7 +222,7 @@ var UsersService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list-following <user>")
+					showHelp(c, "list-following", "list-following <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -257,7 +257,7 @@ var UsersService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "is-following <user> <target>")
+					showHelp(c, "is-following", "is-following <user> <target>")
 				}
 
 				user := c.Args().Get(0)
@@ -278,7 +278,7 @@ var UsersService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "follow <user>")
+					showHelp(c, "follow", "follow <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -297,7 +297,7 @@ var UsersService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "unfollow <user>")
+					showHelp(c, "unfollow", "unfollow <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -321,7 +321,7 @@ var UsersService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list-keys <user>")
+					showHelp(c, "list-keys", "list-keys <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -355,7 +355,7 @@ var UsersService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "get-key <id>")
+					showHelp(c, "get-key", "get-key <id>")
 				}
 
 				id, err := strconv.Atoi(c.Args().Get(0))
@@ -382,7 +382,7 @@ var UsersService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "delete-key <id>")
+					showHelp(c, "delete-key", "delete-key <id>")
 				}
 
 				id, err := strconv.Atoi(c.Args().Get(0))

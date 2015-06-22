@@ -42,7 +42,7 @@ var GistsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "get <id>")
+					showHelp(c, "get", "get <id>")
 				}
 
 				id := c.Args().Get(0)
@@ -62,7 +62,7 @@ var GistsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "get-revision <id> <sha>")
+					showHelp(c, "get-revision", "get-revision <id> <sha>")
 				}
 
 				id := c.Args().Get(0)
@@ -95,7 +95,7 @@ var GistsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "delete <id>")
+					showHelp(c, "delete", "delete <id>")
 				}
 
 				id := c.Args().Get(0)
@@ -114,7 +114,7 @@ var GistsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "star <id>")
+					showHelp(c, "star", "star <id>")
 				}
 
 				id := c.Args().Get(0)
@@ -133,7 +133,7 @@ var GistsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "unstar <id>")
+					showHelp(c, "unstar", "unstar <id>")
 				}
 
 				id := c.Args().Get(0)
@@ -152,7 +152,7 @@ var GistsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "is-starred <id>")
+					showHelp(c, "is-starred", "is-starred <id>")
 				}
 
 				id := c.Args().Get(0)
@@ -172,7 +172,7 @@ var GistsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "fork <id>")
+					showHelp(c, "fork", "fork <id>")
 				}
 
 				id := c.Args().Get(0)
@@ -196,7 +196,7 @@ var GistsService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list-comments <gist-id>")
+					showHelp(c, "list-comments", "list-comments <gist-id>")
 				}
 
 				gistID := c.Args().Get(0)
@@ -230,7 +230,7 @@ var GistsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "get-comment <gist-id> <comment-id>")
+					showHelp(c, "get-comment", "get-comment <gist-id> <comment-id>")
 				}
 
 				gistID := c.Args().Get(0)
@@ -264,7 +264,7 @@ var GistsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "delete-comment <gist-id> <comment-id>")
+					showHelp(c, "delete-comment", "delete-comment <gist-id> <comment-id>")
 				}
 
 				gistID := c.Args().Get(0)

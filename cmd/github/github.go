@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"net/http"
 	"os"
+	"regexp"
 	"strconv"
 
 	"github.com/codegangsta/cli"
@@ -63,6 +65,16 @@ func fixHelp(c *cli.Context) {
 	c.App.Email = app.cli.Email
 	c.App.Version = app.cli.Version
 	cli.ShowAppHelp(c)
+}
+
+func showHelp(c *cli.Context, methodName, usage string) {
+	var out bytes.Buffer
+	c.App.Writer = &out
+	cli.ShowSubcommandHelp(c)
+
+	re := regexp.MustCompile("command " + methodName + " [^\n]+")
+	fmt.Print(re.ReplaceAllString(out.String(), fmt.Sprintf("%s %s [command options]", c.App.Name, usage)))
+	os.Exit(1)
 }
 
 func fatalln(v ...interface{}) {

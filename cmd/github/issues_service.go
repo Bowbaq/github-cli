@@ -42,7 +42,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get <owner> <repo> <number>")
+					showHelp(c, "get", "get <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -82,7 +82,7 @@ var IssuesService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-assignees <owner> <repo>")
+					showHelp(c, "list-assignees", "list-assignees <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -117,7 +117,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "is-assignee <owner> <repo> <user>")
+					showHelp(c, "is-assignee", "is-assignee <owner> <repo> <user>")
 				}
 
 				owner := c.Args().Get(0)
@@ -145,7 +145,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get-comment <owner> <repo> <id>")
+					showHelp(c, "get-comment", "get-comment <owner> <repo> <id>")
 				}
 
 				owner := c.Args().Get(0)
@@ -180,7 +180,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "delete-comment <owner> <repo> <id>")
+					showHelp(c, "delete-comment", "delete-comment <owner> <repo> <id>")
 				}
 
 				owner := c.Args().Get(0)
@@ -206,7 +206,7 @@ var IssuesService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "list-issue-events <owner> <repo> <number>")
+					showHelp(c, "list-issue-events", "list-issue-events <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -247,7 +247,7 @@ var IssuesService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-repository-events <owner> <repo>")
+					showHelp(c, "list-repository-events", "list-repository-events <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -282,7 +282,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get-event <owner> <repo> <id>")
+					showHelp(c, "get-event", "get-event <owner> <repo> <id>")
 				}
 
 				owner := c.Args().Get(0)
@@ -309,7 +309,7 @@ var IssuesService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-labels <owner> <repo>")
+					showHelp(c, "list-labels", "list-labels <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -344,7 +344,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get-label <owner> <repo> <name>")
+					showHelp(c, "get-label", "get-label <owner> <repo> <name>")
 				}
 
 				owner := c.Args().Get(0)
@@ -378,7 +378,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "delete-label <owner> <repo> <name>")
+					showHelp(c, "delete-label", "delete-label <owner> <repo> <name>")
 				}
 
 				owner := c.Args().Get(0)
@@ -403,7 +403,7 @@ var IssuesService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "list-labels-by-issue <owner> <repo> <number>")
+					showHelp(c, "list-labels-by-issue", "list-labels-by-issue <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -446,7 +446,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 4 {
-					fatalln("Usage: " + c.App.Name + "remove-label-for-issue <owner> <repo> <number> <label>")
+					showHelp(c, "remove-label-for-issue", "remove-label-for-issue <owner> <repo> <number> <label>")
 				}
 
 				owner := c.Args().Get(0)
@@ -475,7 +475,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "remove-labels-for-issue <owner> <repo> <number>")
+					showHelp(c, "remove-labels-for-issue", "remove-labels-for-issue <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -501,7 +501,7 @@ var IssuesService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "list-labels-for-milestone <owner> <repo> <number>")
+					showHelp(c, "list-labels-for-milestone", "list-labels-for-milestone <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -544,7 +544,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get-milestone <owner> <repo> <number>")
+					showHelp(c, "get-milestone", "get-milestone <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -579,7 +579,7 @@ var IssuesService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "delete-milestone <owner> <repo> <number>")
+					showHelp(c, "delete-milestone", "delete-milestone <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)

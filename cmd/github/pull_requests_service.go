@@ -30,7 +30,7 @@ var PullRequestsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get <owner> <repo> <number>")
+					showHelp(c, "get", "get <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -69,7 +69,7 @@ var PullRequestsService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "list-commits <owner> <repo> <number>")
+					showHelp(c, "list-commits", "list-commits <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -110,7 +110,7 @@ var PullRequestsService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "list-files <owner> <repo> <number>")
+					showHelp(c, "list-files", "list-files <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -147,7 +147,7 @@ var PullRequestsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "is-merged <owner> <repo> <number>")
+					showHelp(c, "is-merged", "is-merged <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -170,7 +170,7 @@ var PullRequestsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 4 {
-					fatalln("Usage: " + c.App.Name + "merge <owner> <repo> <number> <commit-message>")
+					showHelp(c, "merge", "merge <owner> <repo> <number> <commit-message>")
 				}
 
 				owner := c.Args().Get(0)
@@ -200,7 +200,7 @@ var PullRequestsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "get-comment <owner> <repo> <number>")
+					showHelp(c, "get-comment", "get-comment <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)
@@ -235,7 +235,7 @@ var PullRequestsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "delete-comment <owner> <repo> <number>")
+					showHelp(c, "delete-comment", "delete-comment <owner> <repo> <number>")
 				}
 
 				owner := c.Args().Get(0)

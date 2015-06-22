@@ -60,7 +60,7 @@ var ActivityService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-repository-events <owner> <repo>")
+					showHelp(c, "list-repository-events", "list-repository-events <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -99,7 +99,7 @@ var ActivityService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-issue-events-for-repository <owner> <repo>")
+					showHelp(c, "list-issue-events-for-repository", "list-issue-events-for-repository <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -138,7 +138,7 @@ var ActivityService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-events-for-repo-network <owner> <repo>")
+					showHelp(c, "list-events-for-repo-network", "list-events-for-repo-network <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -177,7 +177,7 @@ var ActivityService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list-events-for-organization <org>")
+					showHelp(c, "list-events-for-organization", "list-events-for-organization <org>")
 				}
 
 				org := c.Args().Get(0)
@@ -217,7 +217,7 @@ var ActivityService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-events-performed-by-user <user>")
+					showHelp(c, "list-events-performed-by-user", "list-events-performed-by-user <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -259,7 +259,7 @@ var ActivityService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-events-recieved-by-user <user>")
+					showHelp(c, "list-events-recieved-by-user", "list-events-recieved-by-user <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -300,7 +300,7 @@ var ActivityService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-user-events-for-organization <org> <user>")
+					showHelp(c, "list-user-events-for-organization", "list-user-events-for-organization <org> <user>")
 				}
 
 				org := c.Args().Get(0)
@@ -359,7 +359,7 @@ var ActivityService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "get-thread <id>")
+					showHelp(c, "get-thread", "get-thread <id>")
 				}
 
 				id := c.Args().Get(0)
@@ -379,7 +379,7 @@ var ActivityService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "mark-thread-read <id>")
+					showHelp(c, "mark-thread-read", "mark-thread-read <id>")
 				}
 
 				id := c.Args().Get(0)
@@ -399,7 +399,7 @@ var ActivityService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "get-thread-subscription <id>")
+					showHelp(c, "get-thread-subscription", "get-thread-subscription <id>")
 				}
 
 				id := c.Args().Get(0)
@@ -426,7 +426,7 @@ var ActivityService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "delete-thread-subscription <id>")
+					showHelp(c, "delete-thread-subscription", "delete-thread-subscription <id>")
 				}
 
 				id := c.Args().Get(0)
@@ -449,7 +449,7 @@ var ActivityService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-stargazers <owner> <repo>")
+					showHelp(c, "list-stargazers", "list-stargazers <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -490,7 +490,7 @@ var ActivityService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "is-starred <owner> <repo>")
+					showHelp(c, "is-starred", "is-starred <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -511,7 +511,7 @@ var ActivityService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "star <owner> <repo>")
+					showHelp(c, "star", "star <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -531,7 +531,7 @@ var ActivityService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "unstar <owner> <repo>")
+					showHelp(c, "unstar", "unstar <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -555,7 +555,7 @@ var ActivityService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "list-watchers <owner> <repo>")
+					showHelp(c, "list-watchers", "list-watchers <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -591,7 +591,7 @@ var ActivityService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list-watched <user>")
+					showHelp(c, "list-watched", "list-watched <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -613,7 +613,7 @@ var ActivityService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "get-repository-subscription <owner> <repo>")
+					showHelp(c, "get-repository-subscription", "get-repository-subscription <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)
@@ -641,7 +641,7 @@ var ActivityService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "delete-repository-subscription <owner> <repo>")
+					showHelp(c, "delete-repository-subscription", "delete-repository-subscription <owner> <repo>")
 				}
 
 				owner := c.Args().Get(0)

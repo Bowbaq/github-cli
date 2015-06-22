@@ -29,7 +29,7 @@ var OrganizationsService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list <user>")
+					showHelp(c, "list", "list <user>")
 				}
 
 				user := c.Args().Get(0)
@@ -63,7 +63,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "get <org>")
+					showHelp(c, "get", "get <org>")
 				}
 
 				org := c.Args().Get(0)
@@ -93,7 +93,7 @@ var OrganizationsService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list-hooks <org>")
+					showHelp(c, "list-hooks", "list-hooks <org>")
 				}
 
 				org := c.Args().Get(0)
@@ -127,7 +127,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "get-hook <org> <id>")
+					showHelp(c, "get-hook", "get-hook <org> <id>")
 				}
 
 				org := c.Args().Get(0)
@@ -161,7 +161,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "ping-hook <org> <id>")
+					showHelp(c, "ping-hook", "ping-hook <org> <id>")
 				}
 
 				org := c.Args().Get(0)
@@ -182,7 +182,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "delete-hook <org> <id>")
+					showHelp(c, "delete-hook", "delete-hook <org> <id>")
 				}
 
 				org := c.Args().Get(0)
@@ -209,7 +209,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "is-member <org> <user>")
+					showHelp(c, "is-member", "is-member <org> <user>")
 				}
 
 				org := c.Args().Get(0)
@@ -230,7 +230,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "is-public-member <org> <user>")
+					showHelp(c, "is-public-member", "is-public-member <org> <user>")
 				}
 
 				org := c.Args().Get(0)
@@ -251,7 +251,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "remove-member <org> <user>")
+					showHelp(c, "remove-member", "remove-member <org> <user>")
 				}
 
 				org := c.Args().Get(0)
@@ -271,7 +271,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "publicize-membership <org> <user>")
+					showHelp(c, "publicize-membership", "publicize-membership <org> <user>")
 				}
 
 				org := c.Args().Get(0)
@@ -291,7 +291,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "conceal-membership <org> <user>")
+					showHelp(c, "conceal-membership", "conceal-membership <org> <user>")
 				}
 
 				org := c.Args().Get(0)
@@ -318,7 +318,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "get-org-membership <org>")
+					showHelp(c, "get-org-membership", "get-org-membership <org>")
 				}
 
 				org := c.Args().Get(0)
@@ -348,7 +348,7 @@ var OrganizationsService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list-teams <org>")
+					showHelp(c, "list-teams", "list-teams <org>")
 				}
 
 				org := c.Args().Get(0)
@@ -382,7 +382,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "get-team <team>")
+					showHelp(c, "get-team", "get-team <team>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))
@@ -415,7 +415,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "delete-team <team>")
+					showHelp(c, "delete-team", "delete-team <team>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))
@@ -440,7 +440,7 @@ var OrganizationsService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list-team-members <team>")
+					showHelp(c, "list-team-members", "list-team-members <team>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))
@@ -475,7 +475,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "is-team-member <team> <user>")
+					showHelp(c, "is-team-member", "is-team-member <team> <user>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))
@@ -501,7 +501,7 @@ var OrganizationsService = cli.Command{
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
-					fatalln("Usage: " + c.App.Name + "list-team-repos <team>")
+					showHelp(c, "list-team-repos", "list-team-repos <team>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))
@@ -536,7 +536,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "is-team-repo <team> <owner> <repo>")
+					showHelp(c, "is-team-repo", "is-team-repo <team> <owner> <repo>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))
@@ -561,7 +561,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "add-team-repo <team> <owner> <repo>")
+					showHelp(c, "add-team-repo", "add-team-repo <team> <owner> <repo>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))
@@ -585,7 +585,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 3 {
-					fatalln("Usage: " + c.App.Name + "remove-team-repo <team> <owner> <repo>")
+					showHelp(c, "remove-team-repo", "remove-team-repo <team> <owner> <repo>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))
@@ -639,7 +639,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "get-team-membership <team> <user>")
+					showHelp(c, "get-team-membership", "get-team-membership <team> <user>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))
@@ -676,7 +676,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "add-team-membership <team> <user>")
+					showHelp(c, "add-team-membership", "add-team-membership <team> <user>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))
@@ -698,7 +698,7 @@ var OrganizationsService = cli.Command{
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
-					fatalln("Usage: " + c.App.Name + "remove-team-membership <team> <user>")
+					showHelp(c, "remove-team-membership", "remove-team-membership <team> <user>")
 				}
 
 				team, err := strconv.Atoi(c.Args().Get(0))

@@ -58,7 +58,7 @@ var singleTmpl = template.Must(template.New("single").Funcs(funcMap).Parse(
   },
   Action: func(c *cli.Context) { {{if gt (len .Method.Args) 0}}
     if len(c.Args()) < {{len .Method.Args}} {
-      fatalln("Usage: " + c.App.Name + "{{.Usage}}")
+      showHelp(c, "{{.Method.Name | dasherize}}", "{{.Usage}}")
     }
 
     {{end}}
@@ -86,7 +86,7 @@ var listTmpl = template.Must(template.New("list").Funcs(funcMap).Parse(
   },
   Action: func(c *cli.Context) { {{if gt (len .Method.Args) 1}}
     if len(c.Args()) < {{sub (len .Method.Args) 1}} {
-      fatalln("Usage: " + c.App.Name + "{{.Usage}}")
+      showHelp(c, "{{.Method.Name | dasherize}}", "{{.Usage}}")
     }
 
     {{end}}
