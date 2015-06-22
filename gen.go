@@ -67,7 +67,7 @@ func main() {
 	fmt.Fprintln(f, "# github-cli")
 
 	fmt.Fprintln(f, "## Implemented")
-	fmt.Fprintln(f, "```")
+	fmt.Fprintln(f, "```go")
 	done := 0
 	for _, pair := range sortMapByValue(implemented) {
 		fmt.Fprintln(f, pair.Key)
@@ -79,7 +79,7 @@ func main() {
 	fmt.Fprintln(f, "```")
 
 	fmt.Fprintln(f, "## Unimplemented")
-	fmt.Fprintln(f, "```")
+	fmt.Fprintln(f, "```go")
 	for _, pair := range sortMapByValue(unimplemented) {
 		fmt.Fprintln(f, pair.Key)
 		for _, sig := range unimplemented[pair.Key] {
