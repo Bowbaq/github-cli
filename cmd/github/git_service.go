@@ -1,11 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"os"
-
-	"github.com/codegangsta/cli"
-)
+import "github.com/codegangsta/cli"
 
 var GitService = cli.Command{
 	Name:     "git",
@@ -15,80 +10,67 @@ var GitService = cli.Command{
 		cli.Command{
 			Name: "get-blob",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "create-blob",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "get-commit",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "create-commit",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "get-ref",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "list-refs",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "create-ref",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "update-ref",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "delete-ref",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "get-tag",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "create-tag",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "get-tree",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "create-tree",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		},
 	},

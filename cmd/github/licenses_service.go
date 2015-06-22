@@ -1,11 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"os"
-
-	"github.com/codegangsta/cli"
-)
+import "github.com/codegangsta/cli"
 
 var LicensesService = cli.Command{
 	Name:     "licenses",
@@ -15,14 +10,12 @@ var LicensesService = cli.Command{
 		cli.Command{
 			Name: "list",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "get",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		},
 	},

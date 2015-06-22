@@ -65,6 +65,11 @@ func fixHelp(c *cli.Context) {
 	cli.ShowAppHelp(c)
 }
 
+func fatalln(v ...interface{}) {
+	fmt.Println(v...)
+	os.Exit(1)
+}
+
 func check(err error) {
 	if err != nil {
 		fmt.Println(err)
@@ -75,4 +80,11 @@ func check(err error) {
 func checkResponse(res *http.Response, err error) {
 	check(err)
 	check(github.CheckResponse(res))
+}
+
+func parseInt(s string) int {
+	i, err := strconv.Atoi(s)
+	check(err)
+
+	return i
 }

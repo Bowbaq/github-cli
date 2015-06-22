@@ -7,6 +7,7 @@ import (
 	"os/exec"
 	"path"
 	"sort"
+	"strings"
 	"text/template"
 )
 
@@ -16,10 +17,8 @@ type service struct {
 }
 
 type command struct {
-	Service    string
-	Name       string
-	ReturnType string
-	Tmpl       *template.Template
+	Method method
+	Tmpl   *template.Template
 }
 
 func (c command) Body() string {
@@ -32,16 +31,23 @@ func main() {
 	methods := extractServiceMethods()
 
 	services := make(map[string]*service)
+
+	implemented := make(map[string][]string)
 	unimplemented := make(map[string][]string)
+
 	for _, method := range methods {
-		if _, ok := services[method.service]; !ok {
-			services[method.service] = &service{Name: method.service}
+		if _, ok := services[method.Service]; !ok {
+			services[method.Service] = &service{Name: method.Service}
 		}
 
-		if subCommand := toSubCommand(method); subCommand != nil {
-			services[method.service].SubCommands = append(services[method.service].SubCommands, *subCommand)
-		} else {
+		subCommand := toSubCommand(method)
+
+		services[method.Service].SubCommands = append(services[method.Service].SubCommands, *subCommand)
+
+		if subCommand.Tmpl == notImplementedTmpl {
 			unimplemented[method.signature()] = append(unimplemented[method.signature()], method.String())
+		} else {
+			implemented[method.signature()] = append(implemented[method.signature()], method.String())
 		}
 	}
 
@@ -55,35 +61,52 @@ func main() {
 
 	check(exec.Command("goimports", "-w", "cmd/github").Run())
 
-	sorted := sortMapByValue(unimplemented)
-	missing := 0
-	for _, pair := range sorted {
-		fmt.Println(pair.Key)
-		for _, sig := range unimplemented[pair.Key] {
-			missing += 1
-			fmt.Println("  ", sig)
+	f, err := os.Create(path.Join("cmd", "github", "README.md"))
+	check(err)
+
+	fmt.Fprintln(f, "# github-cli")
+
+	fmt.Fprintln(f, "## Implemented")
+	fmt.Fprintln(f, "```")
+	done := 0
+	for _, pair := range sortMapByValue(implemented) {
+		fmt.Fprintln(f, pair.Key)
+		for _, sig := range implemented[pair.Key] {
+			done += 1
+			fmt.Fprintln(f, "  ", sig)
 		}
 	}
+	fmt.Fprintln(f, "```")
 
-	fmt.Println("Implemented", len(methods)-missing, "/", len(methods))
+	fmt.Fprintln(f, "## Unimplemented")
+	fmt.Fprintln(f, "```")
+	for _, pair := range sortMapByValue(unimplemented) {
+		fmt.Fprintln(f, pair.Key)
+		for _, sig := range unimplemented[pair.Key] {
+			fmt.Fprintln(f, "  ", sig)
+		}
+	}
+	fmt.Fprintln(f, "```")
 
+	fmt.Println("Implemented", done, "/", len(methods))
 }
 
 func toSubCommand(m method) *command {
-	var cmd *command
+	cmd := &command{Method: m, Tmpl: notImplementedTmpl}
 	switch m.signature() {
 	case "(*github.ListOptions)":
-		cmd = &command{Tmpl: simpleListTmpl}
-	default:
-		cmd = &command{Tmpl: notImplementedTmpl}
+		fallthrough
+	case "(string, *github.ListOptions)":
+		fallthrough
+	case "(string, string, *github.ListOptions)":
+		fallthrough
+	case "(string, string, int, *github.ListOptions)":
+		fallthrough
+	case "(string, string, string, *github.ListOptions)":
+		if strings.HasPrefix(m.Returns[0], "[]") {
+			cmd.Tmpl = listTmpl
+		}
 	}
-	if cmd == nil {
-		return nil
-	}
-
-	cmd.Service = m.service
-	cmd.Name = m.name
-	cmd.ReturnType = m.returns[0]
 
 	return cmd
 }

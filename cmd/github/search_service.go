@@ -1,11 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"os"
-
-	"github.com/codegangsta/cli"
-)
+import "github.com/codegangsta/cli"
 
 var SearchService = cli.Command{
 	Name:     "search",
@@ -15,32 +10,27 @@ var SearchService = cli.Command{
 		cli.Command{
 			Name: "repositories",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "issues",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "users",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "code",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "search",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		},
 	},

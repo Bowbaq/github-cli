@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/codegangsta/cli"
 	"github.com/google/go-github/github"
+	"github.com/kr/pretty"
 )
 
 var ActivityService = cli.Command{
@@ -50,165 +50,403 @@ var ActivityService = cli.Command{
 					opt.Page = res.NextPage
 				}
 
-				for _, item := range items {
-					fmt.Println(item)
-				}
+				fmt.Printf("%# v", pretty.Formatter(items))
 			},
 		}, cli.Command{
 			Name: "list-repository-events",
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "all, a",
+					Usage: "fetch all the pages",
+				},
+				cli.IntFlag{
+					Name:  "page, p",
+					Value: 0,
+					Usage: "fetch this specific page",
+				},
+				cli.IntFlag{
+					Name:  "page-size, ps",
+					Value: 30,
+					Usage: "fetch <page-size> items per page",
+				},
+			},
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				if len(c.Args()) < 2 {
+					fatalln("Usage: " + c.App.Name + " list-repository-events <owner> <repo>")
+				}
+
+				var items []github.Event
+
+				opt := &github.ListOptions{
+					Page:    c.Int("page"),
+					PerPage: c.Int("page-size"),
+				}
+
+				for {
+					page, res, err := app.gh.Activity.ListRepositoryEvents(c.Args().Get(0), c.Args().Get(1), opt)
+					checkResponse(res.Response, err)
+
+					items = append(items, page...)
+					if res.NextPage == 0 || !c.Bool("all") {
+						break
+					}
+					opt.Page = res.NextPage
+				}
+
+				fmt.Printf("%# v", pretty.Formatter(items))
 			},
 		}, cli.Command{
 			Name: "list-issue-events-for-repository",
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "all, a",
+					Usage: "fetch all the pages",
+				},
+				cli.IntFlag{
+					Name:  "page, p",
+					Value: 0,
+					Usage: "fetch this specific page",
+				},
+				cli.IntFlag{
+					Name:  "page-size, ps",
+					Value: 30,
+					Usage: "fetch <page-size> items per page",
+				},
+			},
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				if len(c.Args()) < 2 {
+					fatalln("Usage: " + c.App.Name + " list-issue-events-for-repository <owner> <repo>")
+				}
+
+				var items []github.Event
+
+				opt := &github.ListOptions{
+					Page:    c.Int("page"),
+					PerPage: c.Int("page-size"),
+				}
+
+				for {
+					page, res, err := app.gh.Activity.ListIssueEventsForRepository(c.Args().Get(0), c.Args().Get(1), opt)
+					checkResponse(res.Response, err)
+
+					items = append(items, page...)
+					if res.NextPage == 0 || !c.Bool("all") {
+						break
+					}
+					opt.Page = res.NextPage
+				}
+
+				fmt.Printf("%# v", pretty.Formatter(items))
 			},
 		}, cli.Command{
 			Name: "list-events-for-repo-network",
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "all, a",
+					Usage: "fetch all the pages",
+				},
+				cli.IntFlag{
+					Name:  "page, p",
+					Value: 0,
+					Usage: "fetch this specific page",
+				},
+				cli.IntFlag{
+					Name:  "page-size, ps",
+					Value: 30,
+					Usage: "fetch <page-size> items per page",
+				},
+			},
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				if len(c.Args()) < 2 {
+					fatalln("Usage: " + c.App.Name + " list-events-for-repo-network <owner> <repo>")
+				}
+
+				var items []github.Event
+
+				opt := &github.ListOptions{
+					Page:    c.Int("page"),
+					PerPage: c.Int("page-size"),
+				}
+
+				for {
+					page, res, err := app.gh.Activity.ListEventsForRepoNetwork(c.Args().Get(0), c.Args().Get(1), opt)
+					checkResponse(res.Response, err)
+
+					items = append(items, page...)
+					if res.NextPage == 0 || !c.Bool("all") {
+						break
+					}
+					opt.Page = res.NextPage
+				}
+
+				fmt.Printf("%# v", pretty.Formatter(items))
 			},
 		}, cli.Command{
 			Name: "list-events-for-organization",
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "all, a",
+					Usage: "fetch all the pages",
+				},
+				cli.IntFlag{
+					Name:  "page, p",
+					Value: 0,
+					Usage: "fetch this specific page",
+				},
+				cli.IntFlag{
+					Name:  "page-size, ps",
+					Value: 30,
+					Usage: "fetch <page-size> items per page",
+				},
+			},
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				if len(c.Args()) < 1 {
+					fatalln("Usage: " + c.App.Name + " list-events-for-organization <org>")
+				}
+
+				var items []github.Event
+
+				opt := &github.ListOptions{
+					Page:    c.Int("page"),
+					PerPage: c.Int("page-size"),
+				}
+
+				for {
+					page, res, err := app.gh.Activity.ListEventsForOrganization(c.Args().Get(0), opt)
+					checkResponse(res.Response, err)
+
+					items = append(items, page...)
+					if res.NextPage == 0 || !c.Bool("all") {
+						break
+					}
+					opt.Page = res.NextPage
+				}
+
+				fmt.Printf("%# v", pretty.Formatter(items))
 			},
 		}, cli.Command{
 			Name: "list-events-performed-by-user",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "list-events-recieved-by-user",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "list-user-events-for-organization",
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "all, a",
+					Usage: "fetch all the pages",
+				},
+				cli.IntFlag{
+					Name:  "page, p",
+					Value: 0,
+					Usage: "fetch this specific page",
+				},
+				cli.IntFlag{
+					Name:  "page-size, ps",
+					Value: 30,
+					Usage: "fetch <page-size> items per page",
+				},
+			},
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				if len(c.Args()) < 2 {
+					fatalln("Usage: " + c.App.Name + " list-user-events-for-organization <org> <user>")
+				}
+
+				var items []github.Event
+
+				opt := &github.ListOptions{
+					Page:    c.Int("page"),
+					PerPage: c.Int("page-size"),
+				}
+
+				for {
+					page, res, err := app.gh.Activity.ListUserEventsForOrganization(c.Args().Get(0), c.Args().Get(1), opt)
+					checkResponse(res.Response, err)
+
+					items = append(items, page...)
+					if res.NextPage == 0 || !c.Bool("all") {
+						break
+					}
+					opt.Page = res.NextPage
+				}
+
+				fmt.Printf("%# v", pretty.Formatter(items))
 			},
 		}, cli.Command{
 			Name: "list-notifications",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "list-repository-notifications",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "mark-notifications-read",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "mark-repository-notifications-read",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "get-thread",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "mark-thread-read",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "get-thread-subscription",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "set-thread-subscription",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "delete-thread-subscription",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "list-stargazers",
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "all, a",
+					Usage: "fetch all the pages",
+				},
+				cli.IntFlag{
+					Name:  "page, p",
+					Value: 0,
+					Usage: "fetch this specific page",
+				},
+				cli.IntFlag{
+					Name:  "page-size, ps",
+					Value: 30,
+					Usage: "fetch <page-size> items per page",
+				},
+			},
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				if len(c.Args()) < 2 {
+					fatalln("Usage: " + c.App.Name + " list-stargazers <owner> <repo>")
+				}
+
+				var items []github.User
+
+				opt := &github.ListOptions{
+					Page:    c.Int("page"),
+					PerPage: c.Int("page-size"),
+				}
+
+				for {
+					page, res, err := app.gh.Activity.ListStargazers(c.Args().Get(0), c.Args().Get(1), opt)
+					checkResponse(res.Response, err)
+
+					items = append(items, page...)
+					if res.NextPage == 0 || !c.Bool("all") {
+						break
+					}
+					opt.Page = res.NextPage
+				}
+
+				fmt.Printf("%# v", pretty.Formatter(items))
 			},
 		}, cli.Command{
 			Name: "list-starred",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "is-starred",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "star",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "unstar",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "list-watchers",
+			Flags: []cli.Flag{
+				cli.BoolFlag{
+					Name:  "all, a",
+					Usage: "fetch all the pages",
+				},
+				cli.IntFlag{
+					Name:  "page, p",
+					Value: 0,
+					Usage: "fetch this specific page",
+				},
+				cli.IntFlag{
+					Name:  "page-size, ps",
+					Value: 30,
+					Usage: "fetch <page-size> items per page",
+				},
+			},
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				if len(c.Args()) < 2 {
+					fatalln("Usage: " + c.App.Name + " list-watchers <owner> <repo>")
+				}
+
+				var items []github.User
+
+				opt := &github.ListOptions{
+					Page:    c.Int("page"),
+					PerPage: c.Int("page-size"),
+				}
+
+				for {
+					page, res, err := app.gh.Activity.ListWatchers(c.Args().Get(0), c.Args().Get(1), opt)
+					checkResponse(res.Response, err)
+
+					items = append(items, page...)
+					if res.NextPage == 0 || !c.Bool("all") {
+						break
+					}
+					opt.Page = res.NextPage
+				}
+
+				fmt.Printf("%# v", pretty.Formatter(items))
 			},
 		}, cli.Command{
 			Name: "list-watched",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "get-repository-subscription",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "set-repository-subscription",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		}, cli.Command{
 			Name: "delete-repository-subscription",
 			Action: func(c *cli.Context) {
-				fmt.Println("Not implemented")
-				os.Exit(1)
+				fatalln("Not implemented")
 			},
 		},
 	},
