@@ -17,8 +17,7 @@ var LicensesService = cli.Command{
 			Usage: `list popular open source licenses.`,
 			Description: `list popular open source licenses.
 
-   GitHub API docs: https://developer.github.com/v3/licenses/#list-all-licenses
-`,
+   GitHub API docs: https://developer.github.com/v3/licenses/#list-all-licenses`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 
@@ -32,8 +31,7 @@ var LicensesService = cli.Command{
 			Usage: `Fetch extended metadata for one license.`,
 			Description: `Fetch extended metadata for one license.
 
-   GitHub API docs: https://developer.github.com/v3/licenses/#get-an-individual-license
-`,
+   GitHub API docs: https://developer.github.com/v3/licenses/#get-an-individual-license`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {

@@ -33,6 +33,8 @@ func camelcase(name string) string {
 var serviceTmpl = template.Must(template.New("service").Funcs(funcMap).Parse(`
 package main
 
+import "github.com/google/go-github/github"
+
 var {{.Name}} = cli.Command{
   Name:        "{{.Name | pointer | dasherize}}",
   HideHelp:    true,
@@ -53,11 +55,11 @@ var singleTmpl = template.Must(template.New("single").Funcs(funcMap).Parse(
   Usage: ` + "`" + `{{.Method.Usage}}` + "`" + `,
   Description: ` + "`" + `{{.Method.Description}}` + "`" + `,
   Flags: []cli.Flag{
-    {{range .Flags}}{{.}},
+    {{range .Flags}}{{.Declaration}},
     {{end}}
   },
-  Action: func(c *cli.Context) { {{if gt (len .Method.Args) 0}}
-    if len(c.Args()) < {{len .Method.Args}} {
+  Action: func(c *cli.Context) { {{if gt .UsageCount 0}}
+    if len(c.Args()) < {{.UsageCount}} {
       showHelp(c, "{{.Method.Name | dasherize}}", "{{.Usage}}")
     }
 
@@ -69,8 +71,13 @@ var singleTmpl = template.Must(template.New("single").Funcs(funcMap).Parse(
     checkResponse(res.Response, err)
     fmt.Printf("%# v", pretty.Formatter(result))
     {{else}}
+    {{if eq (index .Method.Returns 0) "*github.Response"}}
     res, err := app.gh.{{.Method.Service | pointer}}.{{.Method.Name}}({{.ArgList}})
     checkResponse(res.Response, err)
+    {{else}}
+    _, err := app.gh.{{.Method.Service | pointer}}.{{.Method.Name}}({{.ArgList}})
+    check(err)
+    {{end}}
     {{end}}
   },
 },`))
@@ -81,11 +88,11 @@ var listTmpl = template.Must(template.New("list").Funcs(funcMap).Parse(
   Usage: ` + "`" + `{{.Method.Usage}}` + "`" + `,
   Description: ` + "`" + `{{.Method.Description}}` + "`" + `,
   Flags: []cli.Flag{
-    {{range .Flags}}{{.}},
+    {{range .Flags}}{{.Declaration}},
     {{end}}
   },
-  Action: func(c *cli.Context) { {{if gt (len .Method.Args) 1}}
-    if len(c.Args()) < {{sub (len .Method.Args) 1}} {
+  Action: func(c *cli.Context) { {{if gt .UsageCount 0}}
+    if len(c.Args()) < {{.UsageCount}} {
       showHelp(c, "{{.Method.Name | dasherize}}", "{{.Usage}}")
     }
 

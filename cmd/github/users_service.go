@@ -6,6 +6,7 @@ import (
 
 	"github.com/codegangsta/cli"
 	"github.com/google/go-github/github"
+	"github.com/jinzhu/now"
 	"github.com/kr/pretty"
 )
 
@@ -20,8 +21,7 @@ var UsersService = cli.Command{
 			Description: `get fetches a user.  Passing the empty string will fetch the authenticated
    user.
 
-   GitHub API docs: http://developer.github.com/v3/users/#get-a-single-user
-`,
+   GitHub API docs: http://developer.github.com/v3/users/#get-a-single-user`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -37,23 +37,96 @@ var UsersService = cli.Command{
 			},
 		}, cli.Command{
 			Name:  "edit",
-			Usage: "not implemented",
+			Usage: `edit the authenticated user.`,
+			Description: `edit the authenticated user.
+
+   GitHub API docs: http://developer.github.com/v3/users/#update-the-authenticated-user`,
+			Flags: []cli.Flag{
+				cli.BoolFlag{Name: `hireable`, Usage: ``},
+				cli.StringFlag{Name: `company`, Usage: ``},
+				cli.StringFlag{Name: `email`, Usage: ``},
+				cli.IntFlag{Name: `following`, Usage: ``},
+				cli.StringFlag{Name: `type`, Usage: ``},
+				cli.StringFlag{Name: `login`, Usage: ``},
+				cli.IntFlag{Name: `public-gists`, Usage: ``},
+				cli.IntFlag{Name: `followers`, Usage: ``},
+				cli.IntFlag{Name: `private-gists`, Usage: ``},
+				cli.StringFlag{Name: `name`, Usage: ``},
+				cli.StringFlag{Name: `blog`, Usage: ``},
+				cli.StringFlag{Name: `created-at`, Usage: ``},
+				cli.IntFlag{Name: `total-private-repos`, Usage: ``},
+				cli.IntFlag{Name: `owned-private-repos`, Usage: ``},
+				cli.IntFlag{Name: `collaborators`, Usage: ``},
+				cli.StringFlag{Name: `plan-name`, Usage: ``},
+				cli.IntFlag{Name: `plan-space`, Usage: ``},
+				cli.IntFlag{Name: `plan-collaborators`, Usage: ``},
+				cli.IntFlag{Name: `plan-private-repos`, Usage: ``},
+				cli.StringFlag{Name: `gravatar-id`, Usage: ``},
+				cli.IntFlag{Name: `public-repos`, Usage: ``},
+				cli.StringFlag{Name: `updated-at`, Usage: ``},
+				cli.IntFlag{Name: `id`, Usage: ``},
+				cli.BoolFlag{Name: `site-admin`, Usage: ``},
+				cli.StringFlag{Name: `bio`, Usage: ``},
+				cli.StringFlag{Name: `location`, Usage: ``},
+				cli.IntFlag{Name: `disk-usage`, Usage: ``},
+			},
 			Action: func(c *cli.Context) {
-				fatalln("Not implemented")
+				user := &github.User{
+					Location:          github.String(c.String("location")),
+					DiskUsage:         github.Int(c.Int("disk-usage")),
+					Hireable:          github.Bool(c.Bool("hireable")),
+					Following:         github.Int(c.Int("following")),
+					Type:              github.String(c.String("type")),
+					Login:             github.String(c.String("login")),
+					Company:           github.String(c.String("company")),
+					Email:             github.String(c.String("email")),
+					Name:              github.String(c.String("name")),
+					PublicGists:       github.Int(c.Int("public-gists")),
+					Followers:         github.Int(c.Int("followers")),
+					PrivateGists:      github.Int(c.Int("private-gists")),
+					OwnedPrivateRepos: github.Int(c.Int("owned-private-repos")),
+					Collaborators:     github.Int(c.Int("collaborators")),
+					GravatarID:        github.String(c.String("gravatar-id")),
+					Blog:              github.String(c.String("blog")),
+					CreatedAt:         &github.Timestamp{now.MustParse(c.String("created-at"))},
+					TotalPrivateRepos: github.Int(c.Int("total-private-repos")),
+					ID:                github.Int(c.Int("id")),
+					PublicRepos:       github.Int(c.Int("public-repos")),
+					UpdatedAt:         &github.Timestamp{now.MustParse(c.String("updated-at"))},
+					Bio:               github.String(c.String("bio")),
+					SiteAdmin:         github.Bool(c.Bool("site-admin")),
+				}
+
+				result, res, err := app.gh.Users.Edit(user)
+				checkResponse(res.Response, err)
+				fmt.Printf("%# v", pretty.Formatter(result))
+
 			},
 		}, cli.Command{
 			Name:  "list-all",
-			Usage: "not implemented",
+			Usage: `list-all lists all GitHub users.`,
+			Description: `list-all lists all GitHub users.
+
+   GitHub API docs: http://developer.github.com/v3/users/#get-all-users`,
+			Flags: []cli.Flag{
+				cli.IntFlag{Name: `since`, Usage: `ID of the last user seen`},
+			},
 			Action: func(c *cli.Context) {
-				fatalln("Not implemented")
+				opt := &github.UserListOptions{
+					Since: c.Int("since"),
+				}
+
+				result, res, err := app.gh.Users.ListAll(opt)
+				checkResponse(res.Response, err)
+				fmt.Printf("%# v", pretty.Formatter(result))
+
 			},
 		}, cli.Command{
 			Name:  "promote-site-admin",
 			Usage: `promote-site-admin promotes a user to a site administrator of a GitHub Enterprise instance.`,
 			Description: `promote-site-admin promotes a user to a site administrator of a GitHub Enterprise instance.
 
-   GitHub API docs: https://developer.github.com/v3/users/administration/#promote-an-ordinary-user-to-a-site-administrator
-`,
+   GitHub API docs: https://developer.github.com/v3/users/administration/#promote-an-ordinary-user-to-a-site-administrator`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -71,8 +144,7 @@ var UsersService = cli.Command{
 			Usage: `demote-site-admin demotes a user from site administrator of a GitHub Enterprise instance.`,
 			Description: `demote-site-admin demotes a user from site administrator of a GitHub Enterprise instance.
 
-   GitHub API docs: https://developer.github.com/v3/users/administration/#demote-a-site-administrator-to-an-ordinary-user
-`,
+   GitHub API docs: https://developer.github.com/v3/users/administration/#demote-a-site-administrator-to-an-ordinary-user`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -90,8 +162,7 @@ var UsersService = cli.Command{
 			Usage: `suspend a user on a GitHub Enterprise instance.`,
 			Description: `suspend a user on a GitHub Enterprise instance.
 
-   GitHub API docs: https://developer.github.com/v3/users/administration/#suspend-a-user
-`,
+   GitHub API docs: https://developer.github.com/v3/users/administration/#suspend-a-user`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -109,8 +180,7 @@ var UsersService = cli.Command{
 			Usage: `unsuspend a user on a GitHub Enterprise instance.`,
 			Description: `unsuspend a user on a GitHub Enterprise instance.
 
-   GitHub API docs: https://developer.github.com/v3/users/administration/#unsuspend-a-user
-`,
+   GitHub API docs: https://developer.github.com/v3/users/administration/#unsuspend-a-user`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -128,17 +198,16 @@ var UsersService = cli.Command{
 			Usage: `list-emails lists all email addresses for the authenticated user.`,
 			Description: `list-emails lists all email addresses for the authenticated user.
 
-   GitHub API docs: http://developer.github.com/v3/users/emails/#list-email-addresses-for-a-user
-`,
+   GitHub API docs: http://developer.github.com/v3/users/emails/#list-email-addresses-for-a-user`,
 			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "all, a", Usage: "fetch all the pages"},
-				cli.IntFlag{Name: "page, p", Value: 0, Usage: "fetch this specific page"},
-				cli.IntFlag{Name: "page-size, ps", Value: 30, Usage: "fetch <page-size> items per page"},
+				cli.IntFlag{Name: `page`, Usage: `For paginated result sets, page of results to retrieve.`},
+				cli.IntFlag{Name: `per-page`, Usage: `For paginated result sets, the number of results to include per page.`},
+				cli.BoolFlag{Name: `all`, Usage: `For paginated result sets, fetch all remaining pages starting at "page"`},
 			},
 			Action: func(c *cli.Context) {
 				opt := &github.ListOptions{
+					PerPage: c.Int("per-page"),
 					Page:    c.Int("page"),
-					PerPage: c.Int("page-size"),
 				}
 
 				var items []github.UserEmail
@@ -158,15 +227,36 @@ var UsersService = cli.Command{
 			},
 		}, cli.Command{
 			Name:  "add-emails",
-			Usage: "not implemented",
+			Usage: `add-emails adds email addresses of the authenticated user.`,
+			Description: `add-emails adds email addresses of the authenticated user.
+
+   GitHub API docs: http://developer.github.com/v3/users/emails/#add-email-addresses`,
+			Flags: []cli.Flag{
+				cli.StringSliceFlag{Name: `emails`, Usage: ``},
+			},
 			Action: func(c *cli.Context) {
-				fatalln("Not implemented")
+				emails := c.StringSlice("emails")
+
+				result, res, err := app.gh.Users.AddEmails(emails)
+				checkResponse(res.Response, err)
+				fmt.Printf("%# v", pretty.Formatter(result))
+
 			},
 		}, cli.Command{
 			Name:  "delete-emails",
-			Usage: "not implemented",
+			Usage: `delete-emails deletes email addresses from authenticated user.`,
+			Description: `delete-emails deletes email addresses from authenticated user.
+
+   GitHub API docs: http://developer.github.com/v3/users/emails/#delete-email-addresses`,
+			Flags: []cli.Flag{
+				cli.StringSliceFlag{Name: `emails`, Usage: ``},
+			},
 			Action: func(c *cli.Context) {
-				fatalln("Not implemented")
+				emails := c.StringSlice("emails")
+
+				res, err := app.gh.Users.DeleteEmails(emails)
+				checkResponse(res.Response, err)
+
 			},
 		}, cli.Command{
 			Name:  "list-followers",
@@ -174,12 +264,11 @@ var UsersService = cli.Command{
 			Description: `list-followers lists the followers for a user.  Passing the empty string will
    fetch followers for the authenticated user.
 
-   GitHub API docs: http://developer.github.com/v3/users/followers/#list-followers-of-a-user
-`,
+   GitHub API docs: http://developer.github.com/v3/users/followers/#list-followers-of-a-user`,
 			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "all, a", Usage: "fetch all the pages"},
-				cli.IntFlag{Name: "page, p", Value: 0, Usage: "fetch this specific page"},
-				cli.IntFlag{Name: "page-size, ps", Value: 30, Usage: "fetch <page-size> items per page"},
+				cli.IntFlag{Name: `page`, Usage: `For paginated result sets, page of results to retrieve.`},
+				cli.IntFlag{Name: `per-page`, Usage: `For paginated result sets, the number of results to include per page.`},
+				cli.BoolFlag{Name: `all`, Usage: `For paginated result sets, fetch all remaining pages starting at "page"`},
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -189,7 +278,7 @@ var UsersService = cli.Command{
 				user := c.Args().Get(0)
 				opt := &github.ListOptions{
 					Page:    c.Int("page"),
-					PerPage: c.Int("page-size"),
+					PerPage: c.Int("per-page"),
 				}
 
 				var items []github.User
@@ -213,12 +302,11 @@ var UsersService = cli.Command{
 			Description: `list-following lists the people that a user is following.  Passing the empty
    string will list people the authenticated user is following.
 
-   GitHub API docs: http://developer.github.com/v3/users/followers/#list-users-followed-by-another-user
-`,
+   GitHub API docs: http://developer.github.com/v3/users/followers/#list-users-followed-by-another-user`,
 			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "all, a", Usage: "fetch all the pages"},
-				cli.IntFlag{Name: "page, p", Value: 0, Usage: "fetch this specific page"},
-				cli.IntFlag{Name: "page-size, ps", Value: 30, Usage: "fetch <page-size> items per page"},
+				cli.IntFlag{Name: `page`, Usage: `For paginated result sets, page of results to retrieve.`},
+				cli.IntFlag{Name: `per-page`, Usage: `For paginated result sets, the number of results to include per page.`},
+				cli.BoolFlag{Name: `all`, Usage: `For paginated result sets, fetch all remaining pages starting at "page"`},
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -228,7 +316,7 @@ var UsersService = cli.Command{
 				user := c.Args().Get(0)
 				opt := &github.ListOptions{
 					Page:    c.Int("page"),
-					PerPage: c.Int("page-size"),
+					PerPage: c.Int("per-page"),
 				}
 
 				var items []github.User
@@ -252,8 +340,7 @@ var UsersService = cli.Command{
 			Description: `is-following checks if "user" is following "target".  Passing the empty
    string for "user" will check if the authenticated user is following "target".
 
-   GitHub API docs: http://developer.github.com/v3/users/followers/#check-if-you-are-following-a-user
-`,
+   GitHub API docs: http://developer.github.com/v3/users/followers/#check-if-you-are-following-a-user`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 2 {
@@ -273,8 +360,7 @@ var UsersService = cli.Command{
 			Usage: `follow will cause the authenticated user to follow the specified user.`,
 			Description: `follow will cause the authenticated user to follow the specified user.
 
-   GitHub API docs: http://developer.github.com/v3/users/followers/#follow-a-user
-`,
+   GitHub API docs: http://developer.github.com/v3/users/followers/#follow-a-user`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -292,8 +378,7 @@ var UsersService = cli.Command{
 			Usage: `unfollow will cause the authenticated user to unfollow the specified user.`,
 			Description: `unfollow will cause the authenticated user to unfollow the specified user.
 
-   GitHub API docs: http://developer.github.com/v3/users/followers/#unfollow-a-user
-`,
+   GitHub API docs: http://developer.github.com/v3/users/followers/#unfollow-a-user`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -312,12 +397,11 @@ var UsersService = cli.Command{
 			Description: `list-keys lists the verified public keys for a user.  Passing the empty
    string will fetch keys for the authenticated user.
 
-   GitHub API docs: http://developer.github.com/v3/users/keys/#list-public-keys-for-a-user
-`,
+   GitHub API docs: http://developer.github.com/v3/users/keys/#list-public-keys-for-a-user`,
 			Flags: []cli.Flag{
-				cli.BoolFlag{Name: "all, a", Usage: "fetch all the pages"},
-				cli.IntFlag{Name: "page, p", Value: 0, Usage: "fetch this specific page"},
-				cli.IntFlag{Name: "page-size, ps", Value: 30, Usage: "fetch <page-size> items per page"},
+				cli.IntFlag{Name: `page`, Usage: `For paginated result sets, page of results to retrieve.`},
+				cli.IntFlag{Name: `per-page`, Usage: `For paginated result sets, the number of results to include per page.`},
+				cli.BoolFlag{Name: `all`, Usage: `For paginated result sets, fetch all remaining pages starting at "page"`},
 			},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -326,8 +410,8 @@ var UsersService = cli.Command{
 
 				user := c.Args().Get(0)
 				opt := &github.ListOptions{
+					PerPage: c.Int("per-page"),
 					Page:    c.Int("page"),
-					PerPage: c.Int("page-size"),
 				}
 
 				var items []github.Key
@@ -350,8 +434,7 @@ var UsersService = cli.Command{
 			Usage: `get-key fetches a single public key.`,
 			Description: `get-key fetches a single public key.
 
-   GitHub API docs: http://developer.github.com/v3/users/keys/#get-a-single-public-key
-`,
+   GitHub API docs: http://developer.github.com/v3/users/keys/#get-a-single-public-key`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {
@@ -368,17 +451,33 @@ var UsersService = cli.Command{
 			},
 		}, cli.Command{
 			Name:  "create-key",
-			Usage: "not implemented",
+			Usage: `create-key adds a public key for the authenticated user.`,
+			Description: `create-key adds a public key for the authenticated user.
+
+   GitHub API docs: http://developer.github.com/v3/users/keys/#create-a-public-key`,
+			Flags: []cli.Flag{
+				cli.StringFlag{Name: `title`, Usage: ``},
+				cli.IntFlag{Name: `id`, Usage: ``},
+				cli.StringFlag{Name: `key`, Usage: ``},
+			},
 			Action: func(c *cli.Context) {
-				fatalln("Not implemented")
+				key := &github.Key{
+					ID:    github.Int(c.Int("id")),
+					Key:   github.String(c.String("key")),
+					Title: github.String(c.String("title")),
+				}
+
+				result, res, err := app.gh.Users.CreateKey(key)
+				checkResponse(res.Response, err)
+				fmt.Printf("%# v", pretty.Formatter(result))
+
 			},
 		}, cli.Command{
 			Name:  "delete-key",
 			Usage: `delete-key deletes a public key.`,
 			Description: `delete-key deletes a public key.
 
-   GitHub API docs: http://developer.github.com/v3/users/keys/#delete-a-public-key
-`,
+   GitHub API docs: http://developer.github.com/v3/users/keys/#delete-a-public-key`,
 			Flags: []cli.Flag{},
 			Action: func(c *cli.Context) {
 				if len(c.Args()) < 1 {

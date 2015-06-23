@@ -7,6 +7,7 @@ import (
 	"os"
 	"regexp"
 	"strconv"
+	"time"
 
 	"github.com/codegangsta/cli"
 	"github.com/google/go-github/github"
@@ -40,7 +41,7 @@ func newApp() *application {
 	app.cli.Version = "0.0." + strconv.Itoa(versionNumber)
 	app.cli.HideVersion = true
 	app.cli.HideHelp = true
-	app.cli.Author = "Maxime Bury <maxime.bury@rms.com>"
+	app.cli.Author = "Maxime Bury <maxime.bury@gmail.com>"
 
 	var tc *http.Client
 	if token := os.Getenv("GITHUB_API_TOKEN"); token != "" {
@@ -92,4 +93,16 @@ func check(err error) {
 func checkResponse(res *http.Response, err error) {
 	check(err)
 	check(github.CheckResponse(res))
+}
+
+func timePointer(t time.Time) *time.Time {
+	p := new(time.Time)
+	*p = t
+	return p
+}
+
+func stringSlicePointer(s []string) *[]string {
+	p := new([]string)
+	*p = s
+	return p
 }
